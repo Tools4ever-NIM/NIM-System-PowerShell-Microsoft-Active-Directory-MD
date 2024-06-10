@@ -3116,7 +3116,7 @@ function Idm-MembershipCreate {
         $function_params   = ConvertFrom-Json2 $FunctionParams
 
         LogIO info "Set-ADGroupMember-ADSI" -In @connection_params -Identity $function_params.group -MembersAdd @($function_params.member) -MembersRemove @()
-            $rv = Set-ADGroupMember-ADSI -PassThru @connection_params -Identity $function_params.group -MembersAdd @($function_params.member) -MembersRemove @()
+            $rv = Set-ADGroupMember-ADSI @connection_params -Identity $function_params.group -MembersAdd @($function_params.member) -MembersRemove @()
         LogIO info "Set-ADGroupMember-ADSI" -Out $rv
 
         $rv
@@ -3221,7 +3221,7 @@ function Idm-MembershipsUpdate {
         $function_params   = ConvertFrom-Json2 $FunctionParams
 
         LogIO info "Set-ADGroupMember-ADSI" -In @connection_params -Identity $function_params.group -MembersAdd @($function_params.add) -MembersRemove @($function_params.remove)
-            $rv = Set-ADGroupMember-ADSI -PassThru @connection_params -Identity $function_params.group -MembersAdd @($function_params.add) -MembersRemove @($function_params.remove)
+            $rv = Set-ADGroupMember-ADSI @connection_params -Identity $function_params.group -MembersAdd @($function_params.add) -MembersRemove @($function_params.remove)
         LogIO info "Set-ADGroupMember-ADSI" -Out $rv
 
         $rv
@@ -3265,7 +3265,7 @@ function Idm-MembershipDelete {
         $function_params   = ConvertFrom-Json2 $FunctionParams
 
         LogIO info "Set-ADGroupMember-ADSI" -In @connection_params -Identity $function_params.group -MembersAdd @() -MembersRemove @($function_params.member)
-            $rv = Set-ADGroupMember-ADSI -PassThru @connection_params -Identity $function_params.group -MembersAdd @() -MembersRemove @($function_params.member)
+            $rv = Set-ADGroupMember-ADSI @connection_params -Identity $function_params.group -MembersAdd @() -MembersRemove @($function_params.member)
         LogIO info "Set-ADGroupMember-ADSI" -Out $rv
 
         $rv
