@@ -2885,7 +2885,7 @@ function Idm-AclCreate {
         # Execute function
         #
 
-        $connection_params = ConvertSystemParams -Connection $SystemParams
+        $connection_params = ConvertSystemParams -Create $SystemParams $FunctionParams
         $function_params   = ConvertFrom-Json2 $FunctionParams
 
         LogIO info "New-ADAcl-ADSI" -In @connection_params -ObjectGUID $function_params.ObjectGUID -Identity $function_params.Identity -AccessControlType $function_params.AccessControlType -ActiveDirectoryRights $function_params.ActiveDirectoryRights
@@ -2936,7 +2936,7 @@ function Idm-AclDelete {
         # Execute function
         #
 
-        $connection_params = ConvertSystemParams -Connection $SystemParams
+        $connection_params = ConvertSystemParams -Create $SystemParams $FunctionParams
         $function_params   = ConvertFrom-Json2 $FunctionParams
 
         LogIO info "Remove-ADAcl-ADSI" -In @connection_params -id $function_params.id -Identity $function_params.Identity -ObjectGUID $function_params.ObjectGUID -ActiveDirectoryRights $function_params.ActiveDirectoryRights
