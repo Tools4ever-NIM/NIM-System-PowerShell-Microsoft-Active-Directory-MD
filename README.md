@@ -6,13 +6,17 @@
 This Multi-Domain variant of the Microsoft Active Directory connector supports operations on multiple domains in a forest. It shares most of the capabilities with the [basic Active Directory connector](https://github.com/Tools4ever-NIM/NIM-System-PowerShell-Microsoft-Active-Directory), with the remarks below.
 
 # Data Tables
+- ACLs
 - Computers
 - Groups
 - Memberships
 - Organizational Units
 - Users
 
+
 # Actions
+- ACL
+    - Create/Delete
 - Computers
     - Create/Update/Delete
 - Groups
