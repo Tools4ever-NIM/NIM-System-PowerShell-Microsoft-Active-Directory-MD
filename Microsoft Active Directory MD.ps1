@@ -344,11 +344,11 @@ function Get-ADRidMaster {
 
 function Get-ADRidMasterFromGuid {
     param (
-    [string]$userGUID,
+    [string]$GUID,
 	[PSCredential] $Credential
 )
-    $guid = [guid]::Parse($userGUID)
-    $guidBytes = $guid.ToByteArray()
+    $guidParsed = [guid]::Parse($GUID)
+    $guidBytes = $guidParsed.ToByteArray()
     $adsiGuid = ""
     foreach ($byte in $guidBytes) { $adsiGuid += "\$('{0:X2}' -f $byte)" }
 
@@ -360,7 +360,7 @@ function Get-ADRidMasterFromGuid {
         $ldapPath = "LDAP://$($domain.Name)"
         $entry = Get-DirectoryServicesDirectoryEntry -Credential $Credential -Path $ldapPath
         $searcher = New-Object DirectoryServices.DirectorySearcher($entry)
-        $searcher.Filter = "(&(objectClass=user)(objectGUID=$adsiGUID))"
+        $searcher.Filter = "(objectGUID=$adsiGUID)"
         $searcher.SearchScope = "Subtree"
 
         $result = $searcher.FindOne()
@@ -1854,9 +1854,7 @@ function New-ADUser-ADSI {
         $args.Properties = $Properties
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     New-ADObject-ADSI -Class 'user' -Name $CN -Path $Path @args
 }
@@ -1951,7 +1949,7 @@ function Set-ADUser-ADSI {
         $args.Properties = $Properties
     }
 
-    $args.Server = Get-ADRidMasterFromGuid -userGUID $Identity -Credential $Credential
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     Set-ADObject-ADSI -Identity $Identity @args
 }
@@ -1975,9 +1973,7 @@ function Remove-ADUser-ADSI {
         $args.PassThru = $true
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     Remove-ADObject-ADSI -Identity $Identity @args
 }
@@ -2007,9 +2003,7 @@ function New-ADComputer-ADSI {
         $args.Properties = $Properties
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     New-ADObject-ADSI -Class 'computer' -Name $CN -Path $Path @args
 }
@@ -2072,9 +2066,7 @@ function Get-ADComputer-ADSI {
         $args.SearchBases = $SearchBases
     }
 
-    if ($Servers) {
-        $args.Servers = $Servers
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     Get-ADObject-ADSI @args
 }
@@ -2103,9 +2095,7 @@ function Set-ADComputer-ADSI {
         $args.Properties = $Properties
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     Set-ADObject-ADSI -Identity $Identity @args
 }
@@ -2129,9 +2119,7 @@ function Remove-ADComputer-ADSI {
         $args.PassThru = $true
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     Remove-ADObject-ADSI -Identity $Identity @args
 }
@@ -2161,9 +2149,7 @@ function New-ADGroup-ADSI {
         $args.Properties = $Properties
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     New-ADObject-ADSI -Class 'group' -Name $CN -Path $Path @args
 }
@@ -2256,9 +2242,7 @@ function Set-ADGroup-ADSI {
         $args.Properties = $Properties
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     Set-ADObject-ADSI -Identity $Identity @args
 }
@@ -2282,9 +2266,7 @@ function Remove-ADGroup-ADSI {
         $args.PassThru = $true
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     Remove-ADObject-ADSI -Identity $Identity @args
 }
@@ -2314,9 +2296,7 @@ function New-ADOrganizationalUnit-ADSI {
         $args.Properties = $Properties
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     New-ADObject-ADSI -Class 'organizationalUnit' -Name $OU -Path $Path @args
 }
@@ -2417,9 +2397,7 @@ function Set-ADOrganizationalUnit-ADSI {
         $args.Properties = $Properties
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
 
     Set-ADObject-ADSI -Identity $Identity @args
 }
@@ -2541,7 +2519,7 @@ function Idm-SystemInfo {
         # Sort on reverse name components
         $domains = $domains | Foreach-Object { $rn = $_.Name.Split('.'); [array]::Reverse($rn); $rn = $rn -join '.'; Add-Member -InputObject $_ -MemberType NoteProperty -Name ReverseName -Value $rn -Force -PassThru } | Sort-Object -Property ReverseName
 
-        $dcs = @( $domains | ForEach-Object { @{ display = $_.Name; value = $_.PdcRoleOwner.Name } } )
+        $dcs = @( $domains | ForEach-Object { @{ display = $_.Name; value = $_.RidRoleOwner.Name } } )
 
         @(
             @{
