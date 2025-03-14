@@ -342,6 +342,56 @@ function Get-ADRidMaster {
     $domain_info.RidRoleOwner.Name
 }
 
+function Get-ADRidMasterFromGuid {
+    param (
+    [string]$userGUID,
+	[PSCredential] $Credential
+)
+    <#$guidBytes = [guid]::Parse($userGUID).ToByteArray()
+ 
+    $gcServers = (Get-ADForest).GlobalCatalogs
+
+    foreach ($gc in $gcServers) {
+        try {
+            $user = Get-ADUser -Filter { ObjectGUID -eq $guidBytes } -Server $gc -Properties *
+            if ($user) {
+                Get-ADRidMaster -Credential $credential -Server $gc
+                break  # Stop after the first match
+            }
+        } catch {
+            Log error "Error querying GC: $gc"
+        }
+    }#>
+
+    $guid = [guid]::Parse($userGUID)
+    $guidBytes = $guid.ToByteArray()
+    $adsiGuid = ""
+    foreach ($byte in $guidBytes) { $adsiGuid += "\$('{0:X2}' -f $byte)" }
+
+    $forest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+    $domains = $forest.Domains
+
+    # Iterate through each domain in the forest and search for the user
+    foreach ($domain in $domains) {
+        $ldapPath = "LDAP://$($domain.Name)"
+        $entry = Get-DirectoryServicesDirectoryEntry -Credential $Credential -Path $ldapPath
+        $searcher = New-Object DirectoryServices.DirectorySearcher($entry)
+        $searcher.Filter = "(&(objectClass=user)(objectGUID=$adsiGUID))"
+        $searcher.SearchScope = "Subtree"
+
+        $result = $searcher.FindOne()
+
+        if ($result) {
+            Get-ADRidMaster -Credential $credential -Server $domain.Name
+            break
+        }
+    }
+
+    if (-not $result) {
+        Log error "Could not find RIDMaster for user [$($userGUID)]"
+    }
+}
+
 
 function Get-CannotChangePassword {
     # https://docs.microsoft.com/en-us/windows/win32/adsi/reading-user-cannot-change-password-ldap-provider
@@ -1466,7 +1516,6 @@ function Move-ADObject-ADSI {
     if ($dirent_src.Properties.Count -eq 0) { $dirent_src.RefreshCache() }
 
     $dirent_src.MoveTo($dirent_trg)
-    $dirent_trg.CommitChanges()
 }
 
 
@@ -1918,9 +1967,7 @@ function Set-ADUser-ADSI {
         $args.Properties = $Properties
     }
 
-    if ($Server) {
-        $args.Server = $Server
-    }
+    $args.Server = Get-ADRidMasterFromGuid -userGUID $Identity -Credential $Credential
 
     Set-ADObject-ADSI -Identity $Identity @args
 }
