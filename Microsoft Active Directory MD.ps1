@@ -347,22 +347,6 @@ function Get-ADRidMasterFromGuid {
     [string]$userGUID,
 	[PSCredential] $Credential
 )
-    <#$guidBytes = [guid]::Parse($userGUID).ToByteArray()
- 
-    $gcServers = (Get-ADForest).GlobalCatalogs
-
-    foreach ($gc in $gcServers) {
-        try {
-            $user = Get-ADUser -Filter { ObjectGUID -eq $guidBytes } -Server $gc -Properties *
-            if ($user) {
-                Get-ADRidMaster -Credential $credential -Server $gc
-                break  # Stop after the first match
-            }
-        } catch {
-            Log error "Error querying GC: $gc"
-        }
-    }#>
-
     $guid = [guid]::Parse($userGUID)
     $guidBytes = $guid.ToByteArray()
     $adsiGuid = ""
