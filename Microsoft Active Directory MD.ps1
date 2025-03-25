@@ -1853,8 +1853,9 @@ function New-ADUser-ADSI {
     if ($Properties) {
         $args.Properties = $Properties
     }
-
-    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
+    
+    $domain = Get-DomainFromDN $Path
+    $args.Server = Get-ADRidMaster -Credential $Credential -Server $domain
 
     New-ADObject-ADSI -Class 'user' -Name $CN -Path $Path @args
 }
