@@ -2004,7 +2004,8 @@ function New-ADComputer-ADSI {
         $args.Properties = $Properties
     }
 
-    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
+    $domain = Get-DomainFromDN $Path
+    $args.Server = Get-ADRidMaster -Credential $Credential -Server $domain
 
     New-ADObject-ADSI -Class 'computer' -Name $CN -Path $Path @args
 }
@@ -2150,7 +2151,8 @@ function New-ADGroup-ADSI {
         $args.Properties = $Properties
     }
 
-    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
+    $domain = Get-DomainFromDN $Path
+    $args.Server = Get-ADRidMaster -Credential $Credential -Server $domain
 
     New-ADObject-ADSI -Class 'group' -Name $CN -Path $Path @args
 }
@@ -2297,7 +2299,8 @@ function New-ADOrganizationalUnit-ADSI {
         $args.Properties = $Properties
     }
 
-    $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
+    $domain = Get-DomainFromDN $Path
+    $args.Server = Get-ADRidMaster -Credential $Credential -Server $domain
 
     New-ADObject-ADSI -Class 'organizationalUnit' -Name $OU -Path $Path @args
 }
