@@ -2457,7 +2457,7 @@ function Idm-SystemInfo {
         [string] $ConnectionParams
     )
 
-    Log info "-Connection=$Connection -TestConnection=$TestConnection -Configuration=$Configuration -ConnectionParams='$ConnectionParams'"
+    Log verbose "-Connection=$Connection -TestConnection=$TestConnection -Configuration=$Configuration -ConnectionParams='$ConnectionParams'"
     
     if ($Connection) {
         @(
@@ -2555,7 +2555,7 @@ function Idm-SystemInfo {
         )
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -2766,7 +2766,7 @@ function Idm-UserCreate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -2823,7 +2823,7 @@ function Idm-UserCreate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 function Idm-AclsRead {
@@ -2835,7 +2835,7 @@ function Idm-AclsRead {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -2875,7 +2875,7 @@ function Idm-AclsRead {
         Get-ADObjectACL-ADSI @system_params -LDAPFilter $filter -Properties $properties
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 function Idm-AclCreate {
@@ -2887,7 +2887,7 @@ function Idm-AclCreate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -2926,7 +2926,7 @@ function Idm-AclCreate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 function Idm-AclDelete {
@@ -2938,7 +2938,7 @@ function Idm-AclDelete {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -2977,7 +2977,7 @@ function Idm-AclDelete {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 function Idm-UsersRead {
@@ -2989,7 +2989,7 @@ function Idm-UsersRead {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3029,7 +3029,7 @@ function Idm-UsersRead {
         Get-ADUser-ADSI @system_params -LDAPFilter $filter -Properties $properties
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3042,7 +3042,7 @@ function Idm-UserUpdate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3097,7 +3097,7 @@ function Idm-UserUpdate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3110,7 +3110,7 @@ function Idm-UserDelete {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3141,7 +3141,7 @@ function Idm-UserDelete {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3154,7 +3154,7 @@ function Idm-ComputerCreate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3211,7 +3211,7 @@ function Idm-ComputerCreate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3224,7 +3224,7 @@ function Idm-ComputersRead {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3264,7 +3264,7 @@ function Idm-ComputersRead {
         Get-ADComputer-ADSI @system_params -LDAPFilter $filter -Properties $properties
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3277,7 +3277,7 @@ function Idm-ComputerUpdate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3332,7 +3332,7 @@ function Idm-ComputerUpdate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3345,7 +3345,7 @@ function Idm-ComputerDelete {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3376,7 +3376,7 @@ function Idm-ComputerDelete {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3389,7 +3389,7 @@ function Idm-GroupCreate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3437,7 +3437,7 @@ function Idm-GroupCreate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3450,7 +3450,7 @@ function Idm-GroupsRead {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3493,7 +3493,7 @@ function Idm-GroupsRead {
         Get-ADGroup-ADSI @system_params -LDAPFilter $filter -Properties $properties
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3506,7 +3506,7 @@ function Idm-GroupUpdate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3552,7 +3552,7 @@ function Idm-GroupUpdate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3565,7 +3565,7 @@ function Idm-GroupDelete {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3596,7 +3596,7 @@ function Idm-GroupDelete {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3609,7 +3609,7 @@ function Idm-MembershipCreate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3640,7 +3640,7 @@ function Idm-MembershipCreate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3653,7 +3653,7 @@ function Idm-MembershipsRead {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3699,7 +3699,7 @@ function Idm-MembershipsRead {
         }
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3712,7 +3712,7 @@ function Idm-MembershipsUpdate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3745,7 +3745,7 @@ function Idm-MembershipsUpdate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3758,7 +3758,7 @@ function Idm-MembershipDelete {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3789,7 +3789,7 @@ function Idm-MembershipDelete {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3802,7 +3802,7 @@ function Idm-OrganizationalUnitCreate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3849,7 +3849,7 @@ function Idm-OrganizationalUnitCreate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3862,7 +3862,7 @@ function Idm-OrganizationalUnitsRead {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3906,7 +3906,7 @@ function Idm-OrganizationalUnitsRead {
         Get-ADOrganizationalUnit-ADSI @system_params -LDAPFilter $filter -Properties $properties
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3919,7 +3919,7 @@ function Idm-OrganizationalUnitUpdate {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -3965,7 +3965,7 @@ function Idm-OrganizationalUnitUpdate {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -3978,7 +3978,7 @@ function Idm-OrganizationalUnitDelete {
         [string] $FunctionParams
     )
 
-    Log info "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
+    Log verbose "-GetMeta=$GetMeta -SystemParams='$SystemParams' -FunctionParams='$FunctionParams'"
 
     if ($GetMeta) {
         #
@@ -4009,7 +4009,7 @@ function Idm-OrganizationalUnitDelete {
         $rv
     }
 
-    Log info "Done"
+    Log verbose "Done"
 }
 
 
@@ -4153,7 +4153,7 @@ function Get-ClassMetaData {
         [string] $Class
     )
 
-    Log info "Getting attribute schema of class '$Class'"
+    Log verbose "Getting attribute schema of class '$Class'"
 
     $connection_params = ConvertSystemParams -ClassMeta $SystemParams
 
