@@ -1670,7 +1670,27 @@ function Set-ADObject-ADSI {
             }
 
             'AccountPassword' {
-                $dirent.Invoke('SetPassword', $Properties[$p]) >$null
+                try {
+                    # Retrieve current ChangePasswordAtNextLogon
+                    if ($dirent.Properties["pwdLastSet"][0] -is [System.__ComObject]) {
+                        $ChangePassword = ConvertFrom-ADLargeInteger $dirent.Properties["pwdLastSet"][0]
+                    }
+                    else {
+                        $ChangePassword = $dirent.Properties["pwdLastSet"][0]
+                    }
+
+                    # Update Password
+                    $dirent.Invoke('SetPassword', $Properties[$p]) >$null
+
+                    # Preserve ChanagePasswordAtNextLogon Flag
+                    $val = if ($ChangePassword -eq 0) { 0 } else { -1 }
+
+                    $dirent.Properties['pwdLastSet'].Clear()
+                    $dirent.Properties['pwdLastSet'].Add((ConvertTo-ADLargeInteger $val)) >$null
+                } catch {
+                    Get-ADSIError
+                    throw $_
+                }
                 break
             }
 
