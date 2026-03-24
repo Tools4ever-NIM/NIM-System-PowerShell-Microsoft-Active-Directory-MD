@@ -1258,9 +1258,10 @@ function Get-ADObjectACL-ADSI {
         [ValidateRange(1, [Int32]::MaxValue)] [Int32] $ResultSetSize,
         [ValidateNotNull()] [String[]] $SearchBases,
         [System.DirectoryServices.SearchScope] $SearchScope = 'Subtree',
-        [String] $Server
+        [String] $Server,
+        [ValidateNotNull()] [String[]] $ExcludeSearchBases
     )
-    
+
     $args = @{
         # These parameters always have a value
         LDAPFilter = $LDAPFilter
@@ -1298,6 +1299,23 @@ function Get-ADObjectACL-ADSI {
                 [void]$objects.Add($obj)
             }
         }
+    }
+
+    if ($ExcludeSearchBases -and $ExcludeSearchBases.Length -gt 0) {
+        $filteredObjects = [System.Collections.ArrayList]@()
+        foreach ($obj in $objects) {
+            $isExcluded = $false
+            foreach ($excludeBase in $ExcludeSearchBases) {
+                if ($obj.distinguishedName -like "*,$excludeBase") {
+                    $isExcluded = $true
+                    break
+                }
+            }
+            if (-not $isExcluded) {
+                [void]$filteredObjects.Add($obj)
+            }
+        }
+        $objects = $filteredObjects
     }
 
     foreach ($result in $objects) {
@@ -1500,7 +1518,8 @@ function Get-ADObject-ADSI {
         [ValidateRange(1, [Int32]::MaxValue)] [Int32] $ResultSetSize,
         [ValidateNotNull()] [String[]] $SearchBases,
         [System.DirectoryServices.SearchScope] $SearchScope = 'Subtree',
-        [String[]] $Servers
+        [String[]] $Servers,
+        [ValidateNotNull()] [String[]] $ExcludeSearchBases
     )
 
     $args = @{
@@ -1524,19 +1543,45 @@ function Get-ADObject-ADSI {
 
     $servers_not_null = if ($Servers) { $Servers } else { @('') }
 
+    $objects = [System.Collections.ArrayList]@()
+
     foreach ($server in $servers_not_null) {
         if ($server) {
             $args.Server = $server
         }
 
         if ($SearchBases -eq $null) {
-            Get-ADObjectSingleSearchBase-ADSI @args
+            foreach ($obj in (Get-ADObjectSingleSearchBase-ADSI @args)) {
+                [void]$objects.Add($obj)
+            }
         }
         else {
             foreach ($searchbase in $SearchBases) {
-                Get-ADObjectSingleSearchBase-ADSI @args -SearchBase $searchbase
+                foreach ($obj in (Get-ADObjectSingleSearchBase-ADSI @args -SearchBase $searchbase)) {
+                    [void]$objects.Add($obj)
+                }
             }
         }
+    }
+
+    if ($ExcludeSearchBases -and $ExcludeSearchBases.Length -gt 0) {
+        $filteredObjects = [System.Collections.ArrayList]@()
+        foreach ($obj in $objects) {
+            $isExcluded = $false
+            foreach ($excludeBase in $ExcludeSearchBases) {
+                if ($obj.distinguishedName -like "*,$excludeBase") {
+                    $isExcluded = $true
+                    break
+                }
+            }
+            if (-not $isExcluded) {
+                [void]$filteredObjects.Add($obj)
+            }
+        }
+        $filteredObjects
+    }
+    else {
+        $objects
     }
 }
 
@@ -1990,7 +2035,8 @@ function Get-ADUser-ADSI {
         [ValidateRange(1, [Int32]::MaxValue)] [Int32] $ResultSetSize,
         [ValidateNotNull()] $SearchBases,
         [System.DirectoryServices.SearchScope] $SearchScope = 'Subtree',
-        [String[]] $Servers
+        [String[]] $Servers,
+        [ValidateNotNull()] [String[]] $ExcludeSearchBases
     )
 
     $args = @{
@@ -2041,6 +2087,10 @@ function Get-ADUser-ADSI {
 
     if ($Servers) {
         $args.Servers = $Servers
+    }
+
+    if ($ExcludeSearchBases) {
+        $args.ExcludeSearchBases = $ExcludeSearchBases
     }
 
     Get-ADObject-ADSI @args
@@ -2140,7 +2190,8 @@ function Get-ADComputer-ADSI {
         [ValidateRange(1, [Int32]::MaxValue)] [Int32] $ResultSetSize,
         [ValidateNotNull()] $SearchBases,
         [System.DirectoryServices.SearchScope] $SearchScope = 'Subtree',
-        [String[]] $Servers
+        [String[]] $Servers,
+        [ValidateNotNull()] [String[]] $ExcludeSearchBases
     )
 
     $args = @{
@@ -2186,6 +2237,10 @@ function Get-ADComputer-ADSI {
 
     if ($SearchBases -ne $null) {
         $args.SearchBases = $SearchBases
+    }
+
+    if ($ExcludeSearchBases) {
+        $args.ExcludeSearchBases = $ExcludeSearchBases
     }
 
     $args.Server = Get-ADRidMasterFromGuid -GUID $Identity -Credential $Credential
@@ -2287,7 +2342,8 @@ function Get-ADGroup-ADSI {
         [ValidateRange(1, [Int32]::MaxValue)] [Int32] $ResultSetSize,
         [ValidateNotNull()] $SearchBases,
         [System.DirectoryServices.SearchScope] $SearchScope = 'Subtree',
-        [String[]] $Servers
+        [String[]] $Servers,
+        [ValidateNotNull()] [String[]] $ExcludeSearchBases
     )
 
     $args = @{
@@ -2336,6 +2392,10 @@ function Get-ADGroup-ADSI {
 
     if ($Servers) {
         $args.Servers = $Servers
+    }
+
+    if ($ExcludeSearchBases) {
+        $args.ExcludeSearchBases = $ExcludeSearchBases
     }
 
     Get-ADObject-ADSI @args
@@ -2436,7 +2496,8 @@ function Get-ADOrganizationalUnit-ADSI {
         [ValidateRange(1, [Int32]::MaxValue)] [Int32] $ResultSetSize,
         [ValidateNotNull()] $SearchBases,
         [System.DirectoryServices.SearchScope] $SearchScope = 'Subtree',
-        [String[]] $Servers
+        [String[]] $Servers,
+        [ValidateNotNull()] [String[]] $ExcludeSearchBases
     )
 
     $args = @{
@@ -2492,6 +2553,10 @@ function Get-ADOrganizationalUnit-ADSI {
 
     if ($Servers) {
         $args.Servers = $Servers
+    }
+
+    if ($ExcludeSearchBases) {
+        $args.ExcludeSearchBases = $ExcludeSearchBases
     }
 
     Get-ADObject-ADSI @args
@@ -2645,6 +2710,12 @@ function Idm-SystemInfo {
 
         $dcs = @( $domains | ForEach-Object { @{ display = $_.Name; value = $_.RidRoleOwner.Name } } )
 
+        $ou_params = @{}
+        if ($connection_params.Credential) { $ou_params.Credential = $connection_params.Credential }
+        $ou_params.Servers = @($domains | ForEach-Object { $_.RidRoleOwner.Name })
+
+        $organizational_units = @( Get-ADOrganizationalUnit-ADSI @ou_params -Properties @('distinguishedName', 'canonicalName') -LDAPFilter '*' | Sort-Object -Property 'canonicalName' | ForEach-Object { @{ display = $_.canonicalName; value = $_.distinguishedName } } )
+
         @(
             @{
                 name = 'domains'
@@ -2664,6 +2735,25 @@ function Idm-SystemInfo {
                     }
                 }
                 value = @($dcs | ForEach-Object { $_.value })
+            }
+            @{
+                name = 'exclude_searchbases'
+                type = 'grid'
+                label = 'Exclude search bases'
+                tooltip = 'Organization Units to exclude from searching (improves performance by skipping OUs with many objects)'
+                table = @{
+                    rows = $organizational_units
+                    settings_grid = @{
+                        selection = 'multiple'
+                        key_column = 'value'
+                        checkbox = $true
+                        filter = $true
+                        columns = @(
+                            @{ name = 'display'; display_name = 'Organizational Unit' }
+                        )
+                    }
+                }
+                value = @()
             }
             @{
                 name = 'resultpagesize'
@@ -4169,6 +4259,10 @@ function ConvertSystemParams {
 
         if ($system_params.resultpagesize -and $system_params.resultpagesize -ne '0') {
             $out_params.ResultPageSize = $system_params.resultpagesize
+        }
+
+        if ($system_params.exclude_searchbases -and $system_params.exclude_searchbases.Length -gt 0) {
+            $out_params.ExcludeSearchBases = $system_params.exclude_searchbases
         }
     }
 
